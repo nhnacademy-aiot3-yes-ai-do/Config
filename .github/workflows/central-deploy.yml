@@ -19,6 +19,10 @@ jobs:
       deployment: ${{ steps.validate.outputs.deployment }}
       container: ${{ steps.validate.outputs.container }}
     steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
       - name: Validate deployment request
         id: validate
         env:
@@ -30,27 +34,7 @@ jobs:
           QUALITY: ${{ github.event.client_payload.quality.result }}
           COVERAGE: ${{ github.event.client_payload.quality.coverage_result }}
           BUILD: ${{ github.event.client_payload.build.result }}
-        run: |
-          set -euo pipefail
-          
-          case "$SERVICE" in
-            gateway-service)
-              EXPECTED_REPOSITORY="nhnacademy-aiot3-yes-ai-do/Gateway"
-              EXPECTED_IMAGE="ghcr.io/nhnacademy-aiot3-yes-ai-do/gateway"
-              echo "manifest_dir=k8s-services/gateway" >> "$GITHUB_OUTPUT"
-              echo "deployment=gateway-service" >> "$GITHUB_OUTPUT"
-              echo "container=gateway-service" >> "$GITHUB_OUTPUT"
-              ;;
-            *) echo "::error::허용되지 않은 서비스: $SERVICE"; exit 1 ;;
-          esac
-          
-          [ "$REPOSITORY" = "$EXPECTED_REPOSITORY" ] || exit 1
-          [ "$IMAGE" = "$EXPECTED_IMAGE" ] || exit 1
-          [ "$BRANCH" = "main" ] || exit 1
-          [[ "$SHA" =~ ^[0-9a-f]{40}$ ]] || exit 1
-          [ "$QUALITY" = "success" ] || exit 1
-          [ "$COVERAGE" = "success" ] || exit 1
-          [ "$BUILD" = "success" ] || exit 1
+        run: bash .github/scripts/validate-service.sh
 
   deploy:
     needs: validate
@@ -73,101 +57,21 @@ jobs:
 
       - name: Apply manifests and roll out new image
         uses: appleboy/ssh-action@v1
+        env:
+          RUN_ID: ${{ github.run_id }}
+          MANIFEST_DIR: ${{ needs.validate.outputs.manifest_dir }}
+          DEPLOYMENT: ${{ needs.validate.outputs.deployment }}
+          CONTAINER: ${{ needs.validate.outputs.container }}
+          IMAGE: ${{ github.event.client_payload.build.image_name }}
+          TARGET_TAG: ${{ github.event.client_payload.commit.sha }}
+          SIMULATE: ${{ github.event.client_payload.options.simulate_deploy_failure }}
         with:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            set -eu
-            export PATH=$HOME/bin:$PATH
-
-            ROOT="/tmp/central-deploy-${{ github.run_id }}"
-            DIR="$ROOT/${{ needs.validate.outputs.manifest_dir }}"
-            DEPLOYMENT="${{ needs.validate.outputs.deployment }}"
-            CONTAINER="${{ needs.validate.outputs.container }}"
-            IMAGE="${{ github.event.client_payload.build.image_name }}"
-            TARGET_TAG="${{ github.event.client_payload.commit.sha }}"
-            SIMULATE="${{ github.event.client_payload.options.simulate_deploy_failure }}"
-
-            trap 'rm -rf "$ROOT"' EXIT
-
-            case "$SIMULATE" in
-              true|false) ;;
-              *) SIMULATE=false ;;
-            esac
-
-            if [ "$SIMULATE" = "true" ]; then
-              TARGET_TAG="${TARGET_TAG}-rollback-test-missing"
-              echo "롤백 테스트 모드: $IMAGE:$TARGET_TAG"
-            fi
-
-            PREVIOUS_REVISION="$(
-              kubectl get deployment "$DEPLOYMENT" \
-                -o jsonpath='{.metadata.annotations.deployment\.kubernetes\.io/revision}' \
-                2>/dev/null || true
-            )"
-
-            PREVIOUS_IMAGE="$(
-              kubectl get deployment "$DEPLOYMENT" \
-                -o jsonpath="{.spec.template.spec.containers[?(@.name==\"$CONTAINER\")].image}" \
-                2>/dev/null || true
-            )"
-
-            for RESOURCE in rbac.yaml configmap.yaml service.yaml ingress.yaml; do
-              if [ -f "$DIR/$RESOURCE" ]; then
-                kubectl apply -f "$DIR/$RESOURCE"
-              fi
-            done
-
-            RENDERED_MANIFEST="$ROOT/deployment.rendered.yaml"
-
-            kubectl set image \
-              -f "$DIR/deployment.yaml" \
-              "$CONTAINER=$IMAGE:$TARGET_TAG" \
-              --local -o yaml > "$RENDERED_MANIFEST"
-
-            kubectl apply -f "$RENDERED_MANIFEST"
-
-            if ! kubectl rollout status \
-              "deployment/$DEPLOYMENT" --timeout=210s; then
-              echo "배포 실패: $IMAGE:$TARGET_TAG"
-
-              if [ -z "$PREVIOUS_REVISION" ] || [ -z "$PREVIOUS_IMAGE" ]; then
-                echo "::error::롤백 가능한 이전 배포가 없습니다."
-                exit 1
-              fi
-
-              if ! kubectl rollout undo \
-                "deployment/$DEPLOYMENT" \
-                --to-revision="$PREVIOUS_REVISION"; then
-                echo "::error::Revision $PREVIOUS_REVISION 롤백 명령 실패"
-                exit 1
-              fi
-
-              if ! kubectl rollout status \
-                "deployment/$DEPLOYMENT" --timeout=210s; then
-                echo "::error::롤백 후 정상 상태 복구 실패"
-                exit 1
-              fi
-
-              RECOVERED_IMAGE="$(
-                kubectl get deployment "$DEPLOYMENT" \
-                  -o jsonpath="{.spec.template.spec.containers[?(@.name==\"$CONTAINER\")].image}"
-              )"
-
-              if [ "$RECOVERED_IMAGE" != "$PREVIOUS_IMAGE" ]; then
-                echo "::error::롤백 이미지 불일치"
-                echo "expected=$PREVIOUS_IMAGE"
-                echo "actual=$RECOVERED_IMAGE"
-                exit 1
-              fi
-
-              echo "롤백 완료: revision=$PREVIOUS_REVISION image=$RECOVERED_IMAGE"
-              exit 1
-            fi
-
-            echo "배포 완료: image=$IMAGE:$TARGET_TAG"
+          envs: RUN_ID,MANIFEST_DIR,DEPLOYMENT,CONTAINER,IMAGE,TARGET_TAG,SIMULATE
+          script_file: .github/scripts/deploy-rollout.sh
 
   notify:
     needs: [validate, deploy]
