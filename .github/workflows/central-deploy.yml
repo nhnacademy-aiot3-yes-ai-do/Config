@@ -57,6 +57,7 @@ jobs:
           target: "/tmp/central-deploy-${{ github.run_id }}"
 
       - name: Apply manifests and roll out new image
+        id: rollout
         uses: appleboy/ssh-action@v1
         env:
           RUN_ID: ${{ github.run_id }}
@@ -72,7 +73,17 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           envs: RUN_ID,MANIFEST_DIR,DEPLOYMENT,CONTAINER,IMAGE,TARGET_TAG,SIMULATE
-          script_file: .github/scripts/deploy-rollout.sh
+          script_path: .github/scripts/deploy-rollout.sh
+          capture_stdout: true
+
+      - name: Verify rollout script execution
+        env:
+          ROLLOUT_STDOUT: ${{ steps.rollout.outputs.stdout }}
+        run: |
+          if ! grep -Fq "DEPLOYMENT_VERIFIED" <<< "$ROLLOUT_STDOUT"; then
+            echo "::error::원격 rollout 스크립트의 완료 표식을 확인하지 못했습니다."
+            exit 1
+          fi
 
   notify:
     needs: [validate, deploy]

@@ -83,3 +83,4 @@ if ! kubectl rollout status \
 fi
 
 echo "배포 완료: image=$IMAGE:$TARGET_TAG"
+echo "DEPLOYMENT_VERIFIED image=$IMAGE:$TARGET_TAG"
