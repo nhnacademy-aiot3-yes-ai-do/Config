@@ -18,6 +18,7 @@ jobs:
       manifest_dir: ${{ steps.validate.outputs.manifest_dir }}
       deployment: ${{ steps.validate.outputs.deployment }}
       container: ${{ steps.validate.outputs.container }}
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -91,6 +92,7 @@ jobs:
       quality_result: ${{ github.event.client_payload.quality.result }}
       coverage_result: ${{ github.event.client_payload.quality.coverage_result }}
       coverage_percentage: ${{ github.event.client_payload.quality.coverage_percentage }}
+      coverage_threshold: ${{ github.event.client_payload.quality.coverage_threshold || 'not_available' }}
       sonar_url: ${{ github.event.client_payload.quality.sonar_url }}
 
     secrets:

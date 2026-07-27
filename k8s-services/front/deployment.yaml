@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: front-service
-          image: ghcr.io/nhnacademy-aiot3-yes-ai-do/front:latest
+          image: ghcr.io/nhnacademy-aiot3-yes-ai-do/front_server:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

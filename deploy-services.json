@@ -1,0 +1,16 @@
+{
+  "gateway-service": {
+    "repository": "nhnacademy-aiot3-yes-ai-do/Gateway",
+    "image": "ghcr.io/nhnacademy-aiot3-yes-ai-do/gateway",
+    "manifest_dir": "k8s-services/gateway",
+    "deployment": "gateway-service",
+    "container": "gateway-service"
+  },
+  "front-service": {
+    "repository": "nhnacademy-aiot3-yes-ai-do/Front_server",
+    "image": "ghcr.io/nhnacademy-aiot3-yes-ai-do/front_server",
+    "manifest_dir": "k8s-services/front",
+    "deployment": "front-service",
+    "container": "front-service"
+  }
+}
