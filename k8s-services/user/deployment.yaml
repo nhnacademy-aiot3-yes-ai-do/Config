@@ -21,3 +21,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: user-config
+            - secretRef:
+                name: base-secret
+            - secretRef:
+                name: user-secret

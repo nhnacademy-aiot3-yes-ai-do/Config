@@ -40,6 +40,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: gateway-config
+            - secretRef:
+                name: base-secret
 
           startupProbe:
             httpGet:
