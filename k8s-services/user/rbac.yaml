@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backend-sa
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: backend-discovery-role
+rules:
+  - apiGroups: [""]
+    resources: ["services", "endpoints", "pods"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: backend-discovery-binding
+subjects:
+  - kind: ServiceAccount
+    name: backend-sa
+roleRef:
+  kind: Role
+  name: backend-discovery-role
+  apiGroup: rbac.authorization.k8s.io
