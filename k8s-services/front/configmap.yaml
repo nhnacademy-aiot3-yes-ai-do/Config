@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: front-config
 data:
-  GATEWAY_URL: "http://gateway-service"
+  GATEWAY_URL: "http://gateway-server"

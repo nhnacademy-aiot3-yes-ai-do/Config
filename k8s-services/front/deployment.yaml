@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: front-service
+  name: front-server
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: front-service
+      app: front-server
   template:
     metadata:
       labels:
-        app: front-service
+        app: front-server
     spec:
       containers:
-        - name: front-service
+        - name: front-server
           image: ghcr.io/nhnacademy-aiot3-yes-ai-do/front_server:latest
           imagePullPolicy: Always
           ports:

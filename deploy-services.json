@@ -1,17 +1,17 @@
 {
-  "gateway-service": {
+  "gateway-server": {
     "repository": "nhnacademy-aiot3-yes-ai-do/Gateway",
     "image": "ghcr.io/nhnacademy-aiot3-yes-ai-do/gateway",
     "manifest_dir": "k8s-services/gateway",
-    "deployment": "gateway-service",
-    "container": "gateway-service"
+    "deployment": "gateway-server",
+    "container": "gateway-server"
   },
-  "front-service": {
+  "front-server": {
     "repository": "nhnacademy-aiot3-yes-ai-do/Front_server",
     "image": "ghcr.io/nhnacademy-aiot3-yes-ai-do/front_server",
     "manifest_dir": "k8s-services/front",
-    "deployment": "front-service",
-    "container": "front-service"
+    "deployment": "front-server",
+    "container": "front-server"
   },
   "user-server": {
     "repository": "nhnacademy-aiot3-yes-ai-do/User_server",
