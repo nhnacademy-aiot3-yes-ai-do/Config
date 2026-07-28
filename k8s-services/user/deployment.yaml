@@ -24,4 +24,4 @@ spec:
             - secretRef:
                 name: base-secret
             - secretRef:
-                name: user-secret
+                name: auth-secret
