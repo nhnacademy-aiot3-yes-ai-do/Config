@@ -2,7 +2,7 @@ name: central-deploy
 
 on:
   repository_dispatch:
-    types: [ deploy-service ]
+    types: [deploy-service]
 
 permissions:
   contents: read
@@ -35,7 +35,16 @@ jobs:
           QUALITY: ${{ github.event.client_payload.quality.result }}
           COVERAGE: ${{ github.event.client_payload.quality.coverage_result }}
           BUILD: ${{ github.event.client_payload.build.result }}
-        run: bash .github/scripts/validate-service.sh
+        run: |
+          echo "SERVICE=[$SERVICE]"
+          echo "REPOSITORY=[$REPOSITORY]"
+          echo "BRANCH=[$BRANCH]"
+          echo "SHA=[$SHA]"
+          echo "IMAGE=[$IMAGE]"
+          echo "QUALITY=[$QUALITY]"
+          echo "COVERAGE=[$COVERAGE]"
+          echo "BUILD=[$BUILD]"
+          bash .github/scripts/validate-service.sh
 
   deploy:
     needs: validate
