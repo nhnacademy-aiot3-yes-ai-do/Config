@@ -1,0 +1,35 @@
+name: apply-common-rbac
+on:
+  push:
+    branches: [main]
+    paths:
+      - "k8s-services/common/backend-rbac.yaml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  apply-rbac:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Copy common manifests to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "k8s-services/common/*"
+          target: "/tmp/common-rbac-${{ github.run_id }}"
+      - name: Apply common manifests
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            kubectl apply -f /tmp/common-rbac-${{ github.run_id }}/k8s-services/common/backend-rbac.yaml
+            rm -rf /tmp/common-rbac-${{ github.run_id }}

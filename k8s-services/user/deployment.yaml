@@ -12,6 +12,7 @@ spec:
       labels:
         app: user-server
     spec:
+      serviceAccountName: backend-sa
       containers:
         - name: user-server
           image: ghcr.io/nhnacademy-aiot3-yes-ai-do/user:latest
