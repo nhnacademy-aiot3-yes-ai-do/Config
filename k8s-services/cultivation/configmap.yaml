@@ -4,6 +4,3 @@ metadata:
   name: cultivation-config
 data:
   Cultivation_DB_SCHEMA: "cultivation"
-  EUREKA_ENABLED: "true"
-  K8S_DISCOVERY_ENABLED: "false"
-  LOG_LEVEL: "INFO"
