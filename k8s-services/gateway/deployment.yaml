@@ -42,6 +42,8 @@ spec:
                 name: gateway-config
             - secretRef:
                 name: base-secret
+            - secretRef:
+                name: auth-secret
 
           startupProbe:
             httpGet:
