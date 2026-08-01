@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cultivation-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cultivation-server
+  template:
+    metadata:
+      labels:
+        app: cultivation-server
+    spec:
+      containers:
+        - name: cultivation-server
+          image: ghcr.io/nhnacademy-aiot3-yes-ai-do/cultivation_server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: cultivation-config
+            - secretRef:
+                name: base-secret
