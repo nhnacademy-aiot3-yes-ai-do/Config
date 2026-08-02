@@ -12,6 +12,7 @@ spec:
       labels:
         app: cultivation-server
     spec:
+      serviceAccountName: backend-sa
       containers:
         - name: cultivation-server
           image: ghcr.io/nhnacademy-aiot3-yes-ai-do/cultivation_server:latest
