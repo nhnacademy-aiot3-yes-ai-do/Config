@@ -26,5 +26,12 @@
     "manifest_dir": "k8s-services/cultivation",
     "deployment": "cultivation-server",
     "container": "cultivation-server"
+  },
+  "data-generator-server": {
+    "repository": "nhnacademy-aiot3-yes-ai-do/Data_generator",
+    "image": "ghcr.io/nhnacademy-aiot3-yes-ai-do/data-generator_server",
+    "manifest_dir": "k8s-services/data-generator",
+    "deployment": "data-generator-server",
+    "container": "data-generator-server"
   }
 }

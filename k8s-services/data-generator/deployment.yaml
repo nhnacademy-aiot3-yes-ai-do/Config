@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-generator-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-generator-server
+  template:
+    metadata:
+      labels:
+        app: data-generator-server
+    spec:
+      containers:
+        - name: data-generator-server
+          image: ghcr.io/nhnacademy-aiot3-yes-ai-do/data-generator:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: data-generator-config
