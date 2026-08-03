@@ -31,7 +31,7 @@ spec:
       containers:
         - name: gateway-server
           # CI에서 실제 SHA 이미지로 치환하는 자리
-          image: ghcr.io/nhnacademy-aiot3-yes-ai-do/gateway:IMAGE_TAG
+          image: ghcr.io/nhnacademy-aiot3-yes-ai-do/gateway:latest
           imagePullPolicy: Always
 
           ports:
