@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: data-generator-server
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: data-generator-server
@@ -12,7 +12,6 @@ spec:
       labels:
         app: data-generator-server
     spec:
-      serviceAccountName: backend-sa
       containers:
         - name: data-generator-server
           image: ghcr.io/nhnacademy-aiot3-yes-ai-do/data-generator:latest
