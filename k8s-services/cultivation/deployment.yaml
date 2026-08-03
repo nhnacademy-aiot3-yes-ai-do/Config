@@ -24,3 +24,5 @@ spec:
                 name: cultivation-config
             - secretRef:
                 name: base-secret
+            - secretRef:
+                name: cultivation-secret
