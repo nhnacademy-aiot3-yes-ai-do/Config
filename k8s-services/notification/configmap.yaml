@@ -1,4 +1,4 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cultivation-config
+  name: notification-config
