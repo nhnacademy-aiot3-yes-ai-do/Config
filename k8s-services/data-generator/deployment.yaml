@@ -21,3 +21,5 @@ spec:
           envFrom:
             - configMapRef:
                 name: data-generator-config
+            - secretRef:
+                name: base-secret
