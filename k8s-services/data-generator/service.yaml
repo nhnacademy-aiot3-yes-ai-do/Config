@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: data-generatorer-server
+  name: data-generator-server
 spec:
   selector:
     app: data-generator-server

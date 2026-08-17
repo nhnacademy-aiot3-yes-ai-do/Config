@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: data-generator-server
-          image: ghcr.io/nhnacademy-aiot3-yes-ai-do/data-generator:latest
+          image: ghcr.io/nhnacademy-aiot3-yes-ai-do/data_generator:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
