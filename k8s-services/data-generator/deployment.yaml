@@ -23,3 +23,5 @@ spec:
                 name: data-generator-config
             - secretRef:
                 name: base-secret
+            - secretRef:
+                name: data-generator-secret
