@@ -21,3 +21,5 @@ spec:
           envFrom:
             - configMapRef:
                 name: front-config
+            - secretRef:
+                name: front-secret
