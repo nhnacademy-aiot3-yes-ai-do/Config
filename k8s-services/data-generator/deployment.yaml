@@ -12,6 +12,7 @@ spec:
       labels:
         app: data-generator-server
     spec:
+      serviceAccountName: backend-sa
       containers:
         - name: data-generator-server
           image: ghcr.io/nhnacademy-aiot3-yes-ai-do/data_generator:latest
