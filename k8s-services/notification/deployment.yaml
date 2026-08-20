@@ -23,6 +23,12 @@ spec:
             - configMapRef:
                 name: notification-config
             - secretRef:
-                name: base-secret
+                name: backend-domain-secret
             - secretRef:
                 name: notification-secret
+            - secretRef:
+                name: log-secret
+            - secretRef:
+                name: postgredb-secret
+            - secretRef:
+                name: rabbitmq-secret

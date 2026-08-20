@@ -23,6 +23,14 @@ spec:
             - configMapRef:
                 name: ai-config
             - secretRef:
-                name: base-secret
+                name: backend-domain-secret
             - secretRef:
                 name: ai-secret
+            - secretRef:
+                name: log-secret
+            - secretRef:
+                name: postgredb-secret
+            - secretRef:
+                name: redis-secret
+            - secretRef:
+                name: rabbitmq-secret

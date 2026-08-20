@@ -23,6 +23,10 @@ spec:
             - configMapRef:
                 name: data-generator-config
             - secretRef:
-                name: base-secret
+                name: backend-domain-secret
             - secretRef:
                 name: data-generator-secret
+            - secretRef:
+                name: log-secret
+            - secretRef:
+                name: mqtt-secret
