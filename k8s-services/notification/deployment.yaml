@@ -29,6 +29,6 @@ spec:
             - secretRef:
                 name: log-secret
             - secretRef:
-                name: postgredb-secret
+                name: postgresdb-secret
             - secretRef:
                 name: rabbitmq-secret
