@@ -49,7 +49,7 @@
     "container": "notification-server"
   },
   "rule-engine-server": {
-    "repository": "nhnacademy-aiot3-yes-ai-do/Rule_Engine_server",
+    "repository": "nhnacademy-aiot3-yes-ai-do/Rule_engine_server",
     "image": "ghcr.io/nhnacademy-aiot3-yes-ai-do/rule_engine_server",
     "manifest_dir": "k8s-services/rule-engine",
     "deployment": "rule-engine-server",
