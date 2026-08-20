@@ -41,9 +41,11 @@ spec:
             - configMapRef:
                 name: gateway-config
             - secretRef:
-                name: base-secret
+                name: backend-domain-secret
             - secretRef:
-                name: auth-secret
+                name: gateway-secret
+            - secretRef:
+                name: log-secret
 
           startupProbe:
             httpGet:
