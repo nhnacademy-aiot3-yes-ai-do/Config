@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rule-engine-server
+spec:
+  selector:
+    app: rule-engine-server
+  ports:
+    - port: 80
+      targetPort: 8080

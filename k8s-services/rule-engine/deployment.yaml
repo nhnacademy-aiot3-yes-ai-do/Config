@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rule-engine-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rule-engine-server
+  template:
+    metadata:
+      labels:
+        app: rule-engine-server
+    spec:
+      serviceAccountName: backend-sa
+      containers:
+        - name: rule-engine-server
+          image: ghcr.io/nhnacademy-aiot3-yes-ai-do/rule-engine:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: rule-engine-config
+            - secretRef:
+                name: rule-engine-secret
+            - secretRef:
+                name: log-secret
+            - secretRef:
+                name: influxdb-secret
+            - secretRef:
+                name: rabbitmq-secret
+            - secretRef:
+                name: redis-secret
