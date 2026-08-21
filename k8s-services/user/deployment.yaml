@@ -23,6 +23,18 @@ spec:
             - configMapRef:
                 name: user-config
             - secretRef:
-                name: base-secret
+                name: backend-domain-secret
             - secretRef:
                 name: auth-secret
+            - secretRef:
+                name: log-secret
+            - secretRef:
+                name: postgresdb-secret
+            - secretRef:
+                name: redis-secret
+            - secretRef:
+                name: rabbitmq-secret
+            - secretRef:
+                name: minio-secret
+            - secretRef:
+                name: jwt-secret

@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: data-generator-server
+  name: rule-engine-server
 spec:
   selector:
-    app: data-generator-server
+    app: rule-engine-server
   ports:
     - port: 80
       targetPort: 8080

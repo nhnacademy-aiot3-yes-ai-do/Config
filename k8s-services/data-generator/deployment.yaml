@@ -12,9 +12,10 @@ spec:
       labels:
         app: data-generator-server
     spec:
+      serviceAccountName: backend-sa
       containers:
         - name: data-generator-server
-          image: ghcr.io/nhnacademy-aiot3-yes-ai-do/data-generator:latest
+          image: ghcr.io/nhnacademy-aiot3-yes-ai-do/data_generator:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -22,6 +23,10 @@ spec:
             - configMapRef:
                 name: data-generator-config
             - secretRef:
-                name: base-secret
+                name: backend-domain-secret
             - secretRef:
                 name: data-generator-secret
+            - secretRef:
+                name: log-secret
+            - secretRef:
+                name: mqtt-secret
