@@ -36,3 +36,5 @@ spec:
                 name: rabbitmq-secret
             - secretRef:
                 name: minio-secret
+            - secretRef:
+                name: jwt-secret

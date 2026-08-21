@@ -46,6 +46,8 @@ spec:
                 name: gateway-secret
             - secretRef:
                 name: log-secret
+            - secretRef:
+                name: jwt-secret
 
           startupProbe:
             httpGet:
