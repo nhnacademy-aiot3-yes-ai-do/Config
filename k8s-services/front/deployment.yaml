@@ -12,6 +12,7 @@ spec:
       labels:
         app: front-server
     spec:
+      terminationGracePeriodSeconds: 30
       containers:
         - name: front-server
           image: ghcr.io/nhnacademy-aiot3-yes-ai-do/front_server:latest
@@ -23,3 +24,14 @@ spec:
                 name: front-config
             - secretRef:
                 name: front-secret
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sh", "-c", "sleep 10" ]
