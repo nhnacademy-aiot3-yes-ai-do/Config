@@ -13,6 +13,10 @@ spec:
         app: cultivation-server
     spec:
       serviceAccountName: backend-sa
+      hostAliases:
+        - ip: "10.116.64.12"
+          hostnames:
+            - "storage.java21.net"
       containers:
         - name: cultivation-server
           image: ghcr.io/nhnacademy-aiot3-yes-ai-do/cultivation_server:latest
