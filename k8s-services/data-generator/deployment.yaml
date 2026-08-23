@@ -30,3 +30,5 @@ spec:
                 name: log-secret
             - secretRef:
                 name: mqtt-secret
+            - secretRef:
+                name: rabbitmq-secret
