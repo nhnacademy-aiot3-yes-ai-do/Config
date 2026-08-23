@@ -12,6 +12,11 @@ case "$SIMULATE" in
   *) SIMULATE=false ;;
 esac
 
+case "${ROLLOUT_TIMEOUT_SECONDS:-}" in
+  ''|*[!0-9]*) ROLLOUT_TIMEOUT_SECONDS=210 ;;
+esac
+ROLLOUT_TIMEOUT="${ROLLOUT_TIMEOUT_SECONDS}s"
+
 if [ "$SIMULATE" = "true" ]; then
   TARGET_TAG="${TARGET_TAG}-rollback-test-missing"
   echo "롤백 테스트 모드: $IMAGE:$TARGET_TAG"
@@ -45,7 +50,7 @@ kubectl set image \
 kubectl apply -f "$RENDERED_MANIFEST"
 
 if ! kubectl rollout status \
-  "deployment/$DEPLOYMENT" --timeout=210s; then
+  "deployment/$DEPLOYMENT" --timeout="$ROLLOUT_TIMEOUT"; then
   echo "배포 실패: $IMAGE:$TARGET_TAG"
 
   if [ -z "$PREVIOUS_REVISION" ] || [ -z "$PREVIOUS_IMAGE" ]; then
@@ -61,7 +66,7 @@ if ! kubectl rollout status \
   fi
 
   if ! kubectl rollout status \
-    "deployment/$DEPLOYMENT" --timeout=210s; then
+    "deployment/$DEPLOYMENT" --timeout="$ROLLOUT_TIMEOUT"; then
     echo "::error::롤백 후 정상 상태 복구 실패"
     exit 1
   fi
