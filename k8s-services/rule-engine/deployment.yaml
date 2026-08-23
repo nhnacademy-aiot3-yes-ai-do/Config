@@ -34,3 +34,5 @@ spec:
                 name: redis-secret
             - secretRef:
                 name: mqtt-secret
+            - secretRef:
+                name: backend-domain-secret
