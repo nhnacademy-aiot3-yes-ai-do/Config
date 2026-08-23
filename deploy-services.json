@@ -41,6 +41,15 @@
     "deployment": "ai-server",
     "container": "ai-server"
   },
+  "vision-server": {
+    "repository": "nhnacademy-aiot3-yes-ai-do/Vision_server",
+    "image": "ghcr.io/nhnacademy-aiot3-yes-ai-do/vision_server",
+    "manifest_dir": "k8s-services/vision",
+    "deployment": "vision-server",
+    "container": "vision-server",
+    "coverage_required": false,
+    "rollout_timeout_seconds": 480
+  },
   "notification-server": {
     "repository": "nhnacademy-aiot3-yes-ai-do/Notification_server",
     "image": "ghcr.io/nhnacademy-aiot3-yes-ai-do/notification_server",

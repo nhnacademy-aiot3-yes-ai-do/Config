@@ -18,6 +18,7 @@ jobs:
       manifest_dir: ${{ steps.validate.outputs.manifest_dir }}
       deployment: ${{ steps.validate.outputs.deployment }}
       container: ${{ steps.validate.outputs.container }}
+      rollout_timeout_seconds: ${{ steps.validate.outputs.rollout_timeout_seconds }}
 
     steps:
       - uses: actions/checkout@v4
@@ -49,7 +50,7 @@ jobs:
   deploy:
     needs: validate
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -76,12 +77,13 @@ jobs:
           IMAGE: ${{ github.event.client_payload.build.image_name }}
           TARGET_TAG: ${{ github.event.client_payload.commit.sha }}
           SIMULATE: ${{ github.event.client_payload.options.simulate_deploy_failure }}
+          ROLLOUT_TIMEOUT_SECONDS: ${{ needs.validate.outputs.rollout_timeout_seconds }}
         with:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: RUN_ID,MANIFEST_DIR,DEPLOYMENT,CONTAINER,IMAGE,TARGET_TAG,SIMULATE
+          envs: RUN_ID,MANIFEST_DIR,DEPLOYMENT,CONTAINER,IMAGE,TARGET_TAG,SIMULATE,ROLLOUT_TIMEOUT_SECONDS
           script_path: .github/scripts/deploy-rollout.sh
           capture_stdout: true
 
