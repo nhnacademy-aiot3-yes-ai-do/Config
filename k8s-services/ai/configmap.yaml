@@ -4,4 +4,4 @@ metadata:
   name: ai-config
 data:
   K8S_DISCOVERY_ENABLED: "true"
-  VISION_SERVER_URL: "http://vision-server"
+
