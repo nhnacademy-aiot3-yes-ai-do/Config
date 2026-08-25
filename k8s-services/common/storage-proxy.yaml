@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-storage-external
+  namespace: minio
+spec:
+  ports:
+    - port: 8000
+      targetPort: 8000
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: minio-storage-external
+  namespace: minio
+subsets:
+  - addresses:
+      - ip: 10.116.64.12
+    ports:
+      - port: 8000
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: storage-proxy-strip
+  namespace: minio
+spec:
+  stripPrefix:
+    prefixes:
+      - /storage-proxy
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: storage-proxy-headers
+  namespace: minio
+spec:
+  headers:
+    customRequestHeaders:
+      Host: "storage.java21.net:8000"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: storage-proxy-ingress
+  namespace: minio
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: default-storage-proxy-strip@kubernetescrd,default-storage-proxy-headers@kubernetescrd
+spec:
+  rules:
+    - host: yes-nhn.site
+      http:
+        paths:
+          - path: /storage-proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: minio-storage-external
+                port:
+                  number: 8000
