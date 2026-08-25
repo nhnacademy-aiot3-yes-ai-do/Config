@@ -4,4 +4,3 @@ metadata:
   name: cultivation-config
 data:
   K8S_DISCOVERY_ENABLED: "true"
-  MINIO_PUBLIC_BASE_URL: "https://yes-nhn.site/storage-proxy"
