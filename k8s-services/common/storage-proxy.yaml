@@ -45,7 +45,7 @@ metadata:
   name: storage-proxy-ingress
   namespace: minio
   annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: default-storage-proxy-strip@kubernetescrd,default-storage-proxy-headers@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: minio-storage-proxy-strip@kubernetescrd,minio-storage-proxy-headers@kubernetescrd
 spec:
   rules:
     - host: yes-nhn.site
