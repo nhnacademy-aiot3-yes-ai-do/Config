@@ -4,3 +4,5 @@ metadata:
   name: front-config
 data:
   GATEWAY_URL: "http://gateway-server"
+  AUTH_COOKIE_SECURE: "true"
+  AUTH_COOKIE_DOMAIN: ".yes-nhn.site"
