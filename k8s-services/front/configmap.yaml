@@ -6,3 +6,4 @@ data:
   GATEWAY_URL: "http://gateway-server"
   AUTH_COOKIE_SECURE: "true"
   AUTH_COOKIE_DOMAIN: ".yes-nhn.site"
+  GOOGLE_REDIRECT_URI: "https://yes-nhn.site/login/oauth2/code/google"
