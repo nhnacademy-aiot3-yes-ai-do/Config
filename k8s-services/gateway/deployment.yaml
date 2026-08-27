@@ -48,6 +48,8 @@ spec:
                 name: log-secret
             - secretRef:
                 name: jwt-secret
+            - secretRef:
+                name: redis-secret
 
           startupProbe:
             httpGet:

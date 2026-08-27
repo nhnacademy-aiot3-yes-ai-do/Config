@@ -24,6 +24,8 @@ spec:
                 name: front-config
             - secretRef:
                 name: front-secret
+            - secretRef:
+                name: redis-secret
           readinessProbe:
             httpGet:
               path: /actuator/health

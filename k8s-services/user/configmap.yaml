@@ -4,3 +4,4 @@ metadata:
   name: user-config
 data:
   K8S_DISCOVERY_ENABLED: "true"
+  REDIS_DATABASE: "310"
