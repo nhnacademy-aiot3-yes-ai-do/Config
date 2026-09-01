@@ -2,6 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: front-ingress
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: default-front-retry-on-transient-failure@kubernetescrd
 spec:
   rules:
     - host: yes-nhn.site
