@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ai-daily-feedback
+  namespace: default
+  labels:
+    app: ai-daily-feedback
+    component: batch
+spec:
+  schedule: "5 0 * * *"
+  timeZone: "Asia/Seoul"
+  suspend: false
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 21600
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      activeDeadlineSeconds: 15000
+      template:
+        metadata:
+          labels:
+            app: ai-daily-feedback
+            component: batch
+        spec:
+          restartPolicy: Never
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 100
+            runAsGroup: 101
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: daily-feedback-trigger
+              image: curlimages/curl:8.21.0
+              imagePullPolicy: IfNotPresent
+              command:
+                - curl
+              args:
+                - --fail-with-body
+                - --show-error
+                - --silent
+                - --request
+                - POST
+                - --connect-timeout
+                - "10"
+                - --max-time
+                - "3600"
+                - http://ai-server.default.svc.cluster.local/api/v1/internal/daily-feedbacks/run-previous-day
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop:
+                    - ALL
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 16Mi
+                limits:
+                  cpu: 100m
+                  memory: 64Mi
