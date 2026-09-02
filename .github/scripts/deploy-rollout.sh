@@ -87,5 +87,10 @@ if ! kubectl rollout status \
   exit 1
 fi
 
+if [ -f "$DIR/cronjob.yaml" ]; then
+  echo "추가 CronJob manifest 적용: $DIR/cronjob.yaml"
+  kubectl apply -f "$DIR/cronjob.yaml"
+fi
+
 echo "배포 완료: image=$IMAGE:$TARGET_TAG"
 echo "DEPLOYMENT_VERIFIED image=$IMAGE:$TARGET_TAG"
