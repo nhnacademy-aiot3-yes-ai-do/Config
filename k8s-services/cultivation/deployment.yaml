@@ -40,3 +40,5 @@ spec:
                 name: influxdb-secret
             - secretRef:
                 name: minio-secret
+            - secretRef:
+                name: redis-secret
